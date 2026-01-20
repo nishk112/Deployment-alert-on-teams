@@ -14,39 +14,29 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 🔔 Deployment Started
+      #  Deployment Started
       - name: Notify Teams - Deployment Started
         run: |
           curl -H "Content-Type: application/json" \
           -d '{
-            "text": "🚀 Deployment STARTED\nRepo: **${{ github.repository }}**\nBranch: **${{ github.ref_name }}**"
+            "text": " Deployment STARTED"
           }' \
           ${{ secrets.TEAMS_WEBHOOK_URL }}
 
-      # ⚙️ Deployment (Placeholder)
+      #  Deployment (Placeholder)
       - name: Deployment Step
         run: |
           echo "Deploying application..."
           sleep 10
           echo "Deployment done"
 
-      # ✅ Deployment Completed
+      #  Deployment Completed
       - name: Notify Teams - Deployment Completed
         if: success()
         run: |
           curl -H "Content-Type: application/json" \
           -d '{
-            "text": "✅ Deployment COMPLETED\nRepo: **${{ github.repository }}**"
-          }' \
-          ${{ secrets.TEAMS_WEBHOOK_URL }}
-
-      # ❌ Deployment Failed
-      - name: Notify Teams - Deployment Failed
-        if: failure()
-        run: |
-          curl -H "Content-Type: application/json" \
-          -d '{
-            "text": "❌ Deployment FAILED\nRepo: **${{ github.repository }}**"
+            "text": " Deployment COMPLETED"
           }' \
           ${{ secrets.TEAMS_WEBHOOK_URL }}
 
