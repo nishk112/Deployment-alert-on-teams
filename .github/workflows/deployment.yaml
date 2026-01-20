@@ -1,0 +1,52 @@
+name: CI/CD Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 🔔 Deployment Started
+      - name: Notify Teams - Deployment Started
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+            "text": "🚀 Deployment STARTED\nRepo: **${{ github.repository }}**\nBranch: **${{ github.ref_name }}**"
+          }' \
+          ${{ secrets.TEAMS_WEBHOOK_URL }}
+
+      # ⚙️ Deployment (Placeholder)
+      - name: Deployment Step
+        run: |
+          echo "Deploying application..."
+          sleep 10
+          echo "Deployment done"
+
+      # ✅ Deployment Completed
+      - name: Notify Teams - Deployment Completed
+        if: success()
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+            "text": "✅ Deployment COMPLETED\nRepo: **${{ github.repository }}**"
+          }' \
+          ${{ secrets.TEAMS_WEBHOOK_URL }}
+
+      # ❌ Deployment Failed
+      - name: Notify Teams - Deployment Failed
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+            "text": "❌ Deployment FAILED\nRepo: **${{ github.repository }}**"
+          }' \
+          ${{ secrets.TEAMS_WEBHOOK_URL }}
+
