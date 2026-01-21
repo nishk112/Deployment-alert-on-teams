@@ -15,25 +15,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      #  Deployment Started
-      - name: Notify Teams - Deployment Started
-        run: |
-          curl -H "Content-Type: application/json" \
-          -d '{
-            "@type": "MessageCard",
-            "@context": "http://schema.org/extensions",
-            "themeColor": "0076D7",
-            "summary": "Deployment Started",
-            "title": "Deployment Started",
-            "text": "CI/CD pipeline deployment has started."
-          }' \
-          ${{ secrets.TEAMS_WEBHOOK_URL }}
-
       #  Deployment (Placeholder)
       - name: Deployment Step
         run: |
           echo "Deploying application..."
-          sleep 10
+          sleep 15
           echo "Deployment done"
 
       #  Deployment Completed
