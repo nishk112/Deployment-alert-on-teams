@@ -19,7 +19,12 @@ jobs:
         run: |
           curl -H "Content-Type: application/json" \
           -d '{
-            "text": " Deployment STARTED"
+            "@type": "MessageCard",
+            "@context": "http://schema.org/extensions",
+            "themeColor": "0076D7",
+            "summary": "Deployment Started",
+            "title": "Deployment Started",
+            "text": "CI/CD pipeline deployment has started."
           }' \
           ${{ secrets.TEAMS_WEBHOOK_URL }}
 
@@ -36,7 +41,12 @@ jobs:
         run: |
           curl -H "Content-Type: application/json" \
           -d '{
-            "text": " Deployment COMPLETED"
+            "@type": "MessageCard",
+            "@context": "http://schema.org/extensions",
+            "themeColor": "2EB886",
+            "summary": "Deployment Completed",
+            "title": "Deployment Completed",
+            "text": "Deployment finished successfully."
           }' \
           ${{ secrets.TEAMS_WEBHOOK_URL }}
 
