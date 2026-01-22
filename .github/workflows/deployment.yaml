@@ -7,8 +7,25 @@ on:
       - completed
 
 jobs:
-  deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  notify-start:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Teams - Deployment Started
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+            "@type": "MessageCard",
+            "@context": "http://schema.org/extensions",
+            "themeColor": "0076D7",
+            "summary": "Deployment Started",
+            "title": "Deployment Started",
+            "text": "Backend CI has started."
+          }' \
+          ${{ secrets.TEAMS_WEBHOOK_URL }}
+    deploy:
+    if: >
+      github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
 
     steps:
