@@ -1,15 +1,22 @@
 name: CI/CD Deployment Pipeline
 
 on:
+  push:
+    branches:
+      - main
+
   workflow_run:
     workflows: ["Backend CI"]
     types:
       - completed
 
 jobs:
+
+  # ALERT WHEN BACKEND STARTS
   notify-start:
-    if: ${{ github.event_name == 'push' }}
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
+
     steps:
       - name: Notify Teams - Deployment Started
         run: |
@@ -23,25 +30,23 @@ jobs:
             "text": "Backend CI has started."
           }' \
           ${{ secrets.TEAMS_WEBHOOK_URL }}
-    deploy:
+
+  # DEPLOY AFTER BACKEND SUCCESS
+  deploy:
     if: >
+      github.event_name == 'workflow_run' &&
       github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      #  Deployment (Placeholder)
       - name: Deployment Step
         run: |
           echo "Deploying application..."
-          sleep 15
-          echo "Deployment done"
+          sleep 10
 
-      #  Deployment Completed
       - name: Notify Teams - Deployment Completed
-        if: success()
         run: |
           curl -H "Content-Type: application/json" \
           -d '{
@@ -50,7 +55,6 @@ jobs:
             "themeColor": "2EB886",
             "summary": "Deployment Completed",
             "title": "Deployment Completed",
-            "text": "Deployment finished successfully."
+            "text": "Deployment completed successfully."
           }' \
           ${{ secrets.TEAMS_WEBHOOK_URL }}
-

@@ -4,19 +4,14 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   backend-test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Backend Test Step
+      - name: Backend Tests
         run: |
-          echo "Running backend build / tests..."
+          echo "Backend CI running..."
           sleep 5
-          echo "Backend workflow completed successfully"
-
